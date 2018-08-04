@@ -22,8 +22,8 @@
 
 #include "irrlicht.h"
 
-#include "../Lang.hpp"
-#include "../HeadingIndicator.h"
+#include "Lang.hpp"
+#include "HeadingIndicator.h"
 #include "PositionDataStruct.hpp"
 
 class GUIMain //Create, build and update GUI

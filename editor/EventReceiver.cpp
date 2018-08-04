@@ -22,7 +22,7 @@
 #include "ControllerModel.hpp"
 #include "GeneralDataStruct.hpp"
 //#include "Network.hpp"
-#include "../Utilities.hpp"
+#include "Utilities.hpp"
 
 using namespace irr;
 

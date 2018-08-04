@@ -28,7 +28,7 @@
 #include "GeneralDataStruct.hpp"
 
 #include "GUI.hpp"
-#include "../Lang.hpp"
+#include "Lang.hpp"
 
 #define ZOOMLEVELS 4
 

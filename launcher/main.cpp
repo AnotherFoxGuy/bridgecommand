@@ -5,7 +5,7 @@
 
 #include "irrlicht.h"
 #include <iostream>
-#include "../Lang.hpp"
+#include "Lang.hpp"
 
 //headers for execl
 #ifdef _WIN32

@@ -16,7 +16,7 @@
 
 #include "Network.hpp"
 #include "ControllerModel.hpp"
-#include "../Utilities.hpp"
+#include "Utilities.hpp"
 
 #include <iostream>
 #include <vector>

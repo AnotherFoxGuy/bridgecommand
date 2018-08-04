@@ -15,9 +15,9 @@
      51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA. */
 
 #include "ControllerModel.hpp"
-#include "../IniFile.hpp"
-#include "../Constants.hpp"
-#include "../Utilities.hpp"
+#include "IniFile.hpp"
+#include "Constants.hpp"
+#include "Utilities.hpp"
 #include <iostream>
 
 //Constructor

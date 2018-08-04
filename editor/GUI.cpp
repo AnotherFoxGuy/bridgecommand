@@ -17,8 +17,8 @@
 #define _CRT_SECURE_NO_WARNINGS //FIXME: Temporary fix
 
 #include "GUI.hpp"
-#include "../Constants.hpp"
-#include "../Utilities.hpp"
+#include "Constants.hpp"
+#include "Utilities.hpp"
 
 #include <iostream>
 #include <limits>

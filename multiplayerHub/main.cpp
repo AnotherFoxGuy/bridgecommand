@@ -21,11 +21,11 @@
 
 // Include the Irrlicht header
 #include "irrlicht.h"
-#include "../Utilities.hpp"
-#include "../Constants.hpp"
-#include "../IniFile.hpp"
-#include "../ScenarioDataStructure.hpp"
-#include "../Lang.hpp"
+#include "Utilities.hpp"
+#include "Constants.hpp"
+#include "IniFile.hpp"
+#include "ScenarioDataStructure.hpp"
+#include "Lang.hpp"
 #include "ScenarioChoice.hpp"
 #include "Network.hpp"
 #include "ShipPositions.hpp"

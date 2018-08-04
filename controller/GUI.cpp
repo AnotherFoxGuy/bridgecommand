@@ -15,8 +15,8 @@
      51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA. */
 
 #include "GUI.hpp"
-#include "../Constants.hpp"
-#include "../Utilities.hpp"
+#include "Constants.hpp"
+#include "Utilities.hpp"
 
 #include <iostream>
 #include <limits>

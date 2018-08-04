@@ -16,8 +16,8 @@
 
 #include "Network.hpp"
 
-#include "../Utilities.hpp"
-#include "../Constants.hpp"
+#include "Utilities.hpp"
+#include "Constants.hpp"
 #include <iostream>
 #include <cstdio>
 #include <vector>

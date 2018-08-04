@@ -16,7 +16,7 @@
 
 #include "ScenarioChoice.hpp"
 #include "StartupEventReceiver.hpp"
-#include "../Constants.hpp"
+#include "Constants.hpp"
 
 #include <iostream>
 

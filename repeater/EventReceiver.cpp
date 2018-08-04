@@ -21,7 +21,7 @@
 #include "GUI.hpp"
 #include "ControllerModel.hpp"
 #include "Network.hpp"
-#include "../Utilities.hpp"
+#include "Utilities.hpp"
 
 using namespace irr;
 

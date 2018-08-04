@@ -11,9 +11,9 @@
 #include "irrlicht.h"
 #include <iostream>
 #include <fstream>
-#include "../Lang.hpp"
-#include "../IniFile.hpp"
-#include "../Utilities.hpp"
+#include "Lang.hpp"
+#include "IniFile.hpp"
+#include "Utilities.hpp"
 #ifdef _WIN32
 #include <direct.h> //for windows _mkdir
 #else

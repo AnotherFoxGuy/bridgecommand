@@ -1,0 +1,17 @@
+language: c
+
+addons:
+  apt:
+    sources:
+      - ubuntu-toolchain-r-test
+    packages:
+      - gcc-6
+      - g++-6
+      - cmake
+      - cmake-data
+
+script:
+  - export CXX="g++-6" CC="gcc-6"
+  - cmake .
+  - make -j4
+  - make copy-resources

@@ -21,7 +21,7 @@
 
 #include "irrlicht.h"
 #include "ShipDataStruct.hpp"
-#include "../Leg.hpp"
+#include "Leg.hpp"
 
 struct OtherShipEditorData : public ShipData //To hold information about a ship's position and heading
 {

@@ -15,7 +15,7 @@
      51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA. */
 
 #include "ShipPositions.hpp"
-#include "../Constants.hpp"
+#include "Constants.hpp"
 
 ShipPositions::ShipPositions(unsigned int numberOfShips)
 {

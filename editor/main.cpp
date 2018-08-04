@@ -14,10 +14,10 @@
 #include "GUI.hpp"
 #include "EventReceiver.hpp"
 
-#include "../Constants.hpp"
-#include "../IniFile.hpp"
-#include "../Lang.hpp"
-#include "../Utilities.hpp"
+#include "Constants.hpp"
+#include "IniFile.hpp"
+#include "Lang.hpp"
+#include "Utilities.hpp"
 
 //Mac OS:
 #ifdef __APPLE__

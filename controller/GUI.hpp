@@ -22,7 +22,7 @@
 
 #include "irrlicht.h"
 
-#include "../Lang.hpp"
+#include "Lang.hpp"
 #include "PositionDataStruct.hpp"
 #include "OtherShipDataStruct.hpp"
 

@@ -20,7 +20,7 @@
 #include <string>
 
 #include "irrlicht.h"
-#include "../Constants.hpp"
+#include "Constants.hpp"
 
 struct GeneralData //To hold information about a position, including defaults for new scenarios
 {

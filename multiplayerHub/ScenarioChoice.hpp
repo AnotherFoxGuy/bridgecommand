@@ -18,7 +18,7 @@
 #define __SCENARIOCHOICE_HPP_INCLUDED__
 
 #include "irrlicht.h"
-#include "../Lang.hpp"
+#include "Lang.hpp"
 #include <string>
 #include <vector>
 
