@@ -4,27 +4,62 @@ set(deps_dir ${CMAKE_SOURCE_DIR}/dependencies)
 
 include(SourceFileUtils)
 include(FeatureSummary)
+include(ExternalProject)
 
 project(bridgecommand)
 
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 set(CMAKE_CXX_STANDARD 11)
+
 find_package(OpenGL)
 
+option(BUILD_WITH_SOUND "Build with sound" ON)
 if (MSVC)
     set(icon_rc "${CMAKE_SOURCE_DIR}/etc/icon.rc")
 endif ()
 
 # setup paths
-SET(RUNTIME_OUTPUT_DIRECTORY "${bridgecommand_BINARY_DIR}/bin/")
-SET(LIBRARY_OUTPUT_DIRECTORY "${bridgecommand_BINARY_DIR}/lib/")
-SET(ARCHIVE_OUTPUT_DIRECTORY "${bridgecommand_BINARY_DIR}/lib/")
+SET(RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin/")
+SET(LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib/")
+SET(ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib/")
 SET(EXECUTABLE_OUTPUT_PATH ${RUNTIME_OUTPUT_DIRECTORY})
 SET(LIBRARY_OUTPUT_PATH ${RUNTIME_OUTPUT_DIRECTORY})
+# Set the EP_BASE directory property to setup the build directory structure (see the ExternalProject documentation for more information)
+set_property(DIRECTORY PROPERTY EP_BASE ${CMAKE_BINARY_DIR}/dl-dependencies)
 
 add_subdirectory(${deps_dir}/Irrlicht/irrlicht-svn)
 add_subdirectory(${deps_dir}/enet)
 add_subdirectory(${deps_dir}/serial)
+
+
+if (BUILD_WITH_SOUND)
+    add_definitions(-DWITH_SOUND)
+
+    set(libsndfile_INCLUDE_DIR "${CMAKE_BINARY_DIR}/dl-dependencies/Build/libsndfile-pr/src")
+    set(portaudio_INCLUDE_DIR "${CMAKE_BINARY_DIR}/dl-dependencies/Source/portaudio-pr/include")
+
+    ExternalProject_Add(
+            libsndfile-pr
+            GIT_REPOSITORY https://github.com/erikd/libsndfile.git
+            CMAKE_ARGS
+            -DBUILD_EXAMPLES=OFF
+            -DBUILD_PROGRAMS=OFF
+            -DBUILD_TESTING=OFF
+            -DBUILD_STATIC_LIBS=OFF
+            -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
+            -DCMAKE_CXX_FLAGS=${CMAKE_CXX_FLAGS}
+            INSTALL_COMMAND ""
+    )
+
+    ExternalProject_Add(
+            portaudio-pr
+            GIT_REPOSITORY https://git.assembla.com/portaudio.git
+            CMAKE_ARGS
+            -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
+            -DCMAKE_CXX_FLAGS=${CMAKE_CXX_FLAGS}
+            INSTALL_COMMAND ""
+    )
+endif ()
 
 add_subdirectory(controller)
 add_subdirectory(editor)
