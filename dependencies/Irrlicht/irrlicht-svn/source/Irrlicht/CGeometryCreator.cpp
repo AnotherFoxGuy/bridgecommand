@@ -233,8 +233,8 @@ IMesh* CGeometryCreator::createGeoplaneMesh(f32 radius, u32 rows, u32 columns) c
 		{
 			u32 start = ((j * columns) + i) + 1;
 			u32 next = start + 1;
-			u32 loop_far = (((j + 1) * columns) + i) + 1;
-			u32 farnext = loop_far + 1;
+			u32 far = (((j + 1) * columns) + i) + 1;
+			u32 farnext = far + 1;
 
 			if (i == columns - 1)
 			{
@@ -243,11 +243,11 @@ IMesh* CGeometryCreator::createGeoplaneMesh(f32 radius, u32 rows, u32 columns) c
 			}
 
 			mb->Indices.push_back(start);
-			mb->Indices.push_back(loop_far);
+			mb->Indices.push_back(far);
 			mb->Indices.push_back(next);
 
 			mb->Indices.push_back(next);
-			mb->Indices.push_back(loop_far);
+			mb->Indices.push_back(far);
 			mb->Indices.push_back(farnext);
 		}
 	}

@@ -7,21 +7,6 @@
 #include "IrrCompileConfig.h"
 #include "irrMath.h"
 
-
-#if defined(_IRR_WINDOWS_API_)
-// ----------------------------------------------------------------
-// Windows specific functions
-// ----------------------------------------------------------------
-
-#ifdef _IRR_XBOX_PLATFORM_
-#include <xtl.h>
-#else
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
-#include <time.h>
-#endif
-#endif
-
 #if defined(_IRR_COMPILE_WITH_SDL_DEVICE_)
 	#include <SDL/SDL_endian.h>
 	#define bswap_16(X) SDL_Swap16(X)
@@ -31,7 +16,7 @@
 	#define bswap_16(X) _byteswap_ushort(X)
 	#define bswap_32(X) _byteswap_ulong(X)
 #if (_MSC_VER >= 1400)
-	#define localtime _localtime64_s
+	#define localtime _localtime_s
 #endif
 #elif defined(_IRR_OSX_PLATFORM_)
 	#include <libkern/OSByteOrder.h>
@@ -64,6 +49,17 @@ namespace os
 }
 
 #if defined(_IRR_WINDOWS_API_)
+// ----------------------------------------------------------------
+// Windows specific functions
+// ----------------------------------------------------------------
+
+#ifdef _IRR_XBOX_PLATFORM_
+#include <xtl.h>
+#else
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
+#include <time.h>
+#endif
 
 namespace irr
 {
@@ -254,12 +250,7 @@ namespace os
 		time(&rawtime);
 
 		struct tm * timeinfo;
-		
-#if (_MSC_VER >= 1400)
-        _localtime64_s (timeinfo, &rawtime);
-#else
-        timeinfo = localtime (&rawtime);
-#endif
+		timeinfo = localtime(&rawtime);
 
 		// init with all 0 to indicate error
 		ITimer::RealTimeDate date;
