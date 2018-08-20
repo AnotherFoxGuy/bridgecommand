@@ -27,3 +27,5 @@ if (MSVC)
 else()
     target_link_libraries(${BINNAME} PRIVATE OpenGL::GL)
 endif ()
+
+cotire(${BINNAME})

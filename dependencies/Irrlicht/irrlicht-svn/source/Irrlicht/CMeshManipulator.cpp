@@ -1040,7 +1040,7 @@ namespace
 
 struct height_edge
 {
-	u32 far;
+	u32 he_far;
 
 	u32 polycount;
 	u32 polys[2];
@@ -1179,8 +1179,8 @@ void CMeshManipulator::heightmapOptimizeMesh(IMeshBuffer * const mb, const f32 t
 
 			for (u32 e = 0; e < ecount; e++)
 			{
-				if (edges[e].far == far1 ||
-					edges[e].far == far2)
+				if (edges[e].he_far == far1 ||
+					edges[e].he_far == far2)
 				{
 
 					// Skip if over 2 polys
@@ -1194,7 +1194,7 @@ void CMeshManipulator::heightmapOptimizeMesh(IMeshBuffer * const mb, const f32 t
 						vert[i].Normal;
 					edges[e].polycount++;
 
-					if (edges[e].far == far1)
+					if (edges[e].he_far == far1)
 						far1new = false;
 					else
 						far2new = false;
@@ -1206,7 +1206,7 @@ void CMeshManipulator::heightmapOptimizeMesh(IMeshBuffer * const mb, const f32 t
 				// New edge
 				height_edge ed;
 
-				ed.far = far1;
+				ed.he_far = far1;
 				ed.polycount = 1;
 				ed.polys[0] = j;
 				ed.normal[0] = vert[i].Normal;
@@ -1218,7 +1218,7 @@ void CMeshManipulator::heightmapOptimizeMesh(IMeshBuffer * const mb, const f32 t
 				// New edge
 				height_edge ed;
 
-				ed.far = far2;
+				ed.he_far = far2;
 				ed.polycount = 1;
 				ed.polys[0] = j;
 				ed.normal[0] = vert[i].Normal;
@@ -1241,8 +1241,8 @@ void CMeshManipulator::heightmapOptimizeMesh(IMeshBuffer * const mb, const f32 t
 			{
 				if (f == e) continue;
 
-				vector3df one = mypos - vert[edges[e].far].Pos;
-				vector3df two = vert[edges[f].far].Pos - mypos;
+				vector3df one = mypos - vert[edges[e].he_far].Pos;
+				vector3df two = vert[edges[f].he_far].Pos - mypos;
 
 				one.normalize();
 				two.normalize();
@@ -1288,10 +1288,10 @@ void CMeshManipulator::heightmapOptimizeMesh(IMeshBuffer * const mb, const f32 t
 						{
 							if (edges[g].polys[z] + y == i)
 							{
-								pos[y] = vert[edges[e].far].Pos;
+								pos[y] = vert[edges[e].he_far].Pos;
 							}
 							else if (edges[g].polys[z] + y
-								== edges[e].far)
+								== edges[e].he_far)
 							{
 								flat = true;
 								break;
@@ -1329,7 +1329,7 @@ void CMeshManipulator::heightmapOptimizeMesh(IMeshBuffer * const mb, const f32 t
 				}
 
 				// OK, moving to welding position
-				vert[i] = vert[edges[e].far];
+				vert[i] = vert[edges[e].he_far];
 //				printf("Contracted vert %u to %u\n",
 //					i, edges[e].far);
 			}

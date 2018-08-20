@@ -25,3 +25,5 @@ target_link_libraries(${BINNAME} PRIVATE Irrlicht ${IRRLICHT_LINK_LIBS} enet ser
 if (NOT MSVC)
     target_link_libraries(${BINNAME} PRIVATE OpenGL::GL)
 endif ()
+
+cotire(${BINNAME})

@@ -33,3 +33,5 @@ endif()
 
 ## Include headers
 include_directories(include)
+
+cotire(serial)

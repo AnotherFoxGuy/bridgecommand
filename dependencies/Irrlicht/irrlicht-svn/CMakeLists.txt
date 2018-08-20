@@ -97,7 +97,7 @@ ELSEIF( APPLE )
 ENDIF(  )
 TARGET_LINK_LIBRARIES( Irrlicht ${IRRLICHT_LINK_LIBS} )
 
-
+cotire(Irrlicht)
 
 ################################################################################
 # Export Irrlicht link libraries & include directory
@@ -106,3 +106,5 @@ IF( NOT (CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR) )
 	SET( IRRLICHT_INC_DIR "${CMAKE_CURRENT_SOURCE_DIR}/include" PARENT_SCOPE )
 ENDIF(  )
 ################################################################################
+
+

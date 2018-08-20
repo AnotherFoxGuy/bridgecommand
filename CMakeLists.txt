@@ -5,6 +5,7 @@ set(deps_dir ${CMAKE_SOURCE_DIR}/dependencies)
 include(SourceFileUtils)
 include(FeatureSummary)
 include(ExternalProject)
+include(cotire)
 
 project(bridgecommand)
 
