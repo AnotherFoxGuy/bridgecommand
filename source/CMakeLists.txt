@@ -23,7 +23,7 @@ if(BUILD_WITH_SOUND)
     if (MSVC)
         target_link_libraries(${BINNAME} PRIVATE
                 "${LIBRARY_OUTPUT_DIRECTORY}/portaudio_x86.lib"
-                "${LIBRARY_OUTPUT_DIRECTORY}/libsndfile-1.lib")
+                "${LIBRARY_OUTPUT_DIRECTORY}/sndfile.lib")
 
 		add_custom_command(
                 TARGET ${BINNAME}
