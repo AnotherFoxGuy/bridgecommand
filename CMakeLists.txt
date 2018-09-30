@@ -5,7 +5,15 @@ set(deps_dir ${CMAKE_SOURCE_DIR}/dependencies)
 include(SourceFileUtils)
 include(FeatureSummary)
 include(ExternalProject)
-include(cotire)
+
+# Download cotire automatically
+if(NOT EXISTS "${CMAKE_BINARY_DIR}/cotire.cmake")
+   message(STATUS "Downloading cotire.cmake from https://github.com/sakra/cotire/")
+   file(DOWNLOAD "https://raw.githubusercontent.com/sakra/cotire/master/CMake/cotire.cmake"
+                 "${CMAKE_BINARY_DIR}/cotire.cmake")
+endif()
+
+include(${CMAKE_BINARY_DIR}/cotire.cmake)
 
 project(bridgecommand)
 
