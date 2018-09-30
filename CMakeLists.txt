@@ -24,7 +24,7 @@ find_package(OpenGL)
 
 option(BUILD_WITH_SOUND "Build with sound" ON)
 if (MSVC)
-    set(icon_rc "${CMAKE_SOURCE_DIR}/etc/icon.rc")
+    set(icon_rc "${CMAKE_SOURCE_DIR}/resources/icon.rc")
 endif ()
 
 # setup paths
