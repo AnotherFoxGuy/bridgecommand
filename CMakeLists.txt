@@ -102,17 +102,17 @@ add_subdirectory(source)
 set(cp_dir $<TARGET_FILE_DIR:bridgecommand>)
 add_custom_target(
         copy-resources
-        COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_SOURCE_DIR}/etc/bc5.ini ${cp_dir}/bc5.ini
-        COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_SOURCE_DIR}/etc/map.ini ${cp_dir}/map.ini
-        COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_SOURCE_DIR}/etc/mph.ini ${cp_dir}/mph.ini
-        COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_SOURCE_DIR}/etc/repeater.ini ${cp_dir}/repeater.ini
-        COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_SOURCE_DIR}/etc/language.txt ${cp_dir}/language.txt
-        COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_SOURCE_DIR}/etc/languageController.txt ${cp_dir}/languageController.txt
-        COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_SOURCE_DIR}/etc/languageMultiplayer.txt ${cp_dir}/languageMultiplayer.txt
-        COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_SOURCE_DIR}/etc/languageLauncher.txt ${cp_dir}/languageLauncher.txt
-        COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_SOURCE_DIR}/etc/languageIniEditor.txt ${cp_dir}/languageIniEditor.txt
-        COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_SOURCE_DIR}/etc/languageRepeater.txt ${cp_dir}/languageRepeater.txt
-        COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/resources/ ${cp_dir}/
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_SOURCE_DIR}/resources/bc5.ini ${cp_dir}/bc5.ini
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_SOURCE_DIR}/resources/map.ini ${cp_dir}/map.ini
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_SOURCE_DIR}/resources/mph.ini ${cp_dir}/mph.ini
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_SOURCE_DIR}/resources/repeater.ini ${cp_dir}/repeater.ini
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_SOURCE_DIR}/resources/language-en.txt ${cp_dir}/language-en.txt
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_SOURCE_DIR}/resources/languageController-en.txt ${cp_dir}/languageController-en.txt
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_SOURCE_DIR}/resources/languageMultiplayer-en.txt ${cp_dir}/languageMultiplayer-en.txt
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_SOURCE_DIR}/resources/languageLauncher-en.txt ${cp_dir}/languageLauncher-en.txt
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_SOURCE_DIR}/resources/languageIniEditor-en.txt ${cp_dir}/languageIniEditor-en.txt
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_SOURCE_DIR}/resources/languageRepeater-en.txt ${cp_dir}/languageRepeater-en.txt
+        COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/content/ ${cp_dir}/
         COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/doc/ ${cp_dir}/doc/
         COMMENT "Copy resources to build directory"
         VERBATIM

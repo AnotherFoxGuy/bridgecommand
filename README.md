@@ -1,4 +1,4 @@
-![Bridge Command](etc/img/bclogo.png?raw=true)
+![Bridge Command](resources/img/bclogo.png?raw=true)
 ==============
 
 This is the source code for the development (alpha) version of Bridge Command, developed in C++ using the Irrlicht 3d library.
