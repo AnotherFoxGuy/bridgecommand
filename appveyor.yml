@@ -1,0 +1,15 @@
+version: '{build}'
+pull_requests:
+  do_not_increment_build_number: true
+image: Visual Studio 2017
+configuration: Release
+shallow_clone: true
+before_build:
+- cmd: cmake .
+build:
+  project: bridgecommand.sln
+  parallel: true
+  verbosity: normal
+artifacts:
+- path: bin
+  name: bc-CI-build
