@@ -443,6 +443,23 @@ using namespace irr;
                 if (event.KeyInput.Shift) {
                     //Shift down
 
+                    switch(event.KeyInput.Key)
+                    {
+                        //Camera look
+                        case KEY_LEFT:
+                            device->getGUIEnvironment()->setFocus(0); //Remove focus if space key is pressed, otherwise we get weird effects when the user changes view (as space bar toggles focussed GUI element)
+                            model->lookStepLeft();
+                            break;
+                        case KEY_RIGHT:
+                            device->getGUIEnvironment()->setFocus(0); //Remove focus if space key is pressed, otherwise we get weird effects when the user changes view (as space bar toggles focussed GUI element)
+                            model->lookStepRight();
+                            break;
+                        default:
+                            //don't do anything
+                            break;
+                    }
+
+
                 } else if (event.KeyInput.Control) {
                     //Ctrl down
 
@@ -726,8 +743,8 @@ using namespace irr;
     {
         //Check that the input and output points list are the same length
         if (inputPoints.size() != outputPoints.size() || inputPoints.size() < 2) {
-            std::cout << "Error: lookup1D needs inputPoints and outputPoints list size to be the same, and needs at least two points." << std::endl;
-            exit(EXIT_FAILURE);
+            std::cerr << "Error: lookup1D needs inputPoints and outputPoints list size to be the same, and needs at least two points." << std::endl;
+            return 0;
         }
 
         std::vector<f32>::size_type numberOfPoints = inputPoints.size();
@@ -735,8 +752,8 @@ using namespace irr;
         //Check that inputPoints does not have decreasing values (must be increasing or equal)
         for (unsigned int i=0; i+1<numberOfPoints; i++) {
             if (inputPoints.at(i+1) < inputPoints.at(i)) {
-                std::cout << "Error: inputPoints to lookup1D must not be in a decreasing order." << std::endl;
-                exit(EXIT_FAILURE);
+                std::cerr << "Error: inputPoints to lookup1D must not be in a decreasing order." << std::endl;
+                return 0;
             }
         }
 

@@ -34,7 +34,8 @@ NetworkPrimary::NetworkPrimary(int port, irr::IrrlichtDevice* dev) //Constructor
     //start networking
     if (enet_initialize () != 0) {
         //fprintf(stderr, "An error occurred while initializing ENet.\n");
-        exit (EXIT_FAILURE);
+		std::cerr << "An error occurred while initialising ENet" << std::endl;
+		exit(EXIT_FAILURE);
     }
 
     client = enet_host_create (NULL /* create a client host */,
@@ -44,7 +45,8 @@ NetworkPrimary::NetworkPrimary(int port, irr::IrrlichtDevice* dev) //Constructor
     14400 / 8 /* 56K modem with 14 Kbps upstream bandwidth */);
     if (client == NULL) {
         std::cerr << "An error occurred while trying to create an ENet client host." << std::endl;
-        exit (EXIT_FAILURE); //TODO: Think if this is the best way to handle failure
+		enet_deinitialize();
+		exit(EXIT_FAILURE); //TODO: Think if this is the best way to handle failure
     }
 
     device->getLogger()->log("Started enet.");
@@ -101,7 +103,8 @@ void NetworkPrimary::connectToServer(std::string hostnames)
         if (peer == NULL)
         {
             std::cerr << "No available peers for initiating an ENet connection." << std::endl;
-            exit (EXIT_FAILURE);
+			enet_deinitialize();
+			exit(EXIT_FAILURE);
         }
         /* Wait up to 1 second for the connection attempt to succeed. */
         if (enet_host_service (client, & event, 1000) > 0 && event.type == ENET_EVENT_TYPE_CONNECT) {
@@ -146,7 +149,7 @@ void NetworkPrimary::receiveNetwork()
 
     if (model==0) {
         std::cerr << "Network not linked to model" << std::endl;
-        exit(EXIT_FAILURE);
+        return;
     }
     if (enet_host_service (client, & event, 10) > 0) {
         if (event.type==ENET_EVENT_TYPE_RECEIVE) {

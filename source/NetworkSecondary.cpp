@@ -26,19 +26,10 @@
 NetworkSecondary::NetworkSecondary(int port, OperatingMode::Mode mode, irr::IrrlichtDevice* dev)
 {
     server = 0;
-
-    if (enet_initialize () != 0)
-    {
-        std::cerr << "An error occurred while initializing ENet." << std::endl;
-        exit(EXIT_FAILURE);
-    }
-
     device = dev;
 
     ENetAddress address;
-
     this->mode = mode;
-
     model=0; //Not linked at the moment
 
     accelAdjustment = 0;
@@ -76,10 +67,9 @@ NetworkSecondary::NetworkSecondary(int port, OperatingMode::Mode mode, irr::Irrl
     if (server == NULL)
     {
         std::cerr << "An error occurred while trying to create an ENet server host." << std::endl;
-        exit (EXIT_FAILURE);
-    } else {
-        std::cout << "Connected on UDP port " << server->address.port << std::endl;
-    }
+		enet_deinitialize();
+		exit (EXIT_FAILURE);
+    } 
 
 
 }
@@ -137,7 +127,7 @@ void NetworkSecondary::update()
 
     if (model==0) {
         std::cerr << "Network not linked to model" << std::endl;
-        exit(EXIT_FAILURE);
+        return;
     }
 
     /* Wait up to 10 milliseconds for an event. */

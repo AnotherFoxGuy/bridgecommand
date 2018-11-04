@@ -53,6 +53,11 @@
 #endif
 
 
+#ifdef _MSC_VER
+#pragma comment(linker, "/subsystem:windows /ENTRY:mainCRTStartup")
+#endif
+
+
 //Global definition for ini logger
 namespace IniFile {
     irr::ILogger* irrlichtLogger = 0;
@@ -81,6 +86,28 @@ irr::core::stringw getCredits(){
 
     return creditsString;
 }
+
+#ifdef _WIN32
+static LRESULT CALLBACK CustomWndProc(HWND hWnd, UINT message,
+	WPARAM wParam, LPARAM lParam)
+{
+	switch (message)
+	{
+	case WM_COMMAND:
+	{
+		HWND hwndCtl = (HWND)lParam;
+		int code = HIWORD(wParam);
+	}
+	break;
+	case WM_DESTROY:
+		PostQuitMessage(0);
+		return 0;
+
+	}
+
+	return DefWindowProc(hWnd, message, wParam, lParam);
+}
+#endif
 
 int main()
 {
@@ -119,7 +146,11 @@ int main()
     u32 graphicsHeight = IniFile::iniFileTou32(iniFilename, "graphics_height");
     u32 graphicsDepth = IniFile::iniFileTou32(iniFilename, "graphics_depth");
     bool fullScreen = (IniFile::iniFileTou32(iniFilename, "graphics_mode")==1); //1 for full screen
-    u32 antiAlias = IniFile::iniFileTou32(iniFilename, "anti_alias"); // 0 or 1 for disabled, 2,4,6,8 etc for FSAA
+	bool fakeFullScreen = (IniFile::iniFileTou32(iniFilename, "graphics_mode") == 3); //3 for no border
+	if (fakeFullScreen) {
+		fullScreen = true; //Fall back for non-windows
+	}
+	u32 antiAlias = IniFile::iniFileTou32(iniFilename, "anti_alias"); // 0 or 1 for disabled, 2,4,6,8 etc for FSAA
     u32 directX = IniFile::iniFileTou32(iniFilename, "use_directX"); // 0 for openGl, 1 for directX (if available)
 	u32 disableShaders = IniFile::iniFileTou32(iniFilename, "disable_shaders"); // 0 for normal, 1 for no shaders
 	if (directX == 1) {
@@ -185,9 +216,29 @@ int main()
     }
 
     //Sensible defaults if not set
-    if (graphicsWidth==0) {graphicsWidth=800;}
-    if (graphicsHeight==0) {graphicsHeight=600;}
-    if (graphicsDepth==0) {graphicsDepth=32;}
+	if (graphicsWidth == 0 || graphicsHeight == 0) {
+		IrrlichtDevice *nulldevice = createDevice(video::EDT_NULL);
+		core::dimension2d<u32> deskres = nulldevice->getVideoModeList()->getDesktopResolution();
+		nulldevice->drop();
+		if (graphicsWidth == 0) {
+			if (fullScreen) {
+				graphicsWidth = deskres.Width;
+			} else {
+				graphicsWidth = deskres.Width*0.8;
+			}
+		}
+		if (graphicsHeight == 0) {
+			if (fullScreen) {
+				graphicsHeight = deskres.Height;
+			}
+			else {
+				graphicsHeight = deskres.Height*0.8;
+			}
+		}
+	}
+
+	if (graphicsDepth == 0) { graphicsDepth = 32; }
+
 
     //set size of camera window
     u32 graphicsWidth3d = graphicsWidth;
@@ -195,15 +246,100 @@ int main()
     f32 aspect = (f32)graphicsWidth/(f32)graphicsHeight;
     f32 aspect3d = (f32)graphicsWidth3d/(f32)graphicsHeight3d;
 
+    //load language
+    std::string modifier = IniFile::iniFileToString(iniFilename, "lang");
+    if (modifier.length()==0) {
+        modifier = "en"; //Default
+    }
+    std::string languageFile = "language-";
+    languageFile.append(modifier);
+    languageFile.append(".txt");
+    if (Utilities::pathExists(userFolder + languageFile)) {
+        languageFile = userFolder + languageFile;
+    }
+    Lang language(languageFile);
+
+	SIrrlichtCreationParameters deviceParameters;
+
+#ifdef _WIN32
+
+	HWND hWnd;
+	HINSTANCE hInstance = 0;
+	// create dialog
+	const char* Win32ClassName = "CIrrlichtWindowsTestDialog";
+
+	WNDCLASSEX wcex;
+
+	if (fakeFullScreen) {
+
+		if (GetSystemMetrics(SM_CMONITORS) > 1) {
+			core::stringw locationMessageW = language.translate("moveMessage");
+			
+			std::wstring wlocationMessage = std::wstring(locationMessageW.c_str());
+			std::string slocationMessage(wlocationMessage.begin(), wlocationMessage.end());
+
+			MessageBoxA(nullptr, slocationMessage.c_str(), "Multi monitor", MB_OK);
+		}
+
+		wcex.cbSize = sizeof(WNDCLASSEX);
+		wcex.style = CS_HREDRAW | CS_VREDRAW;
+		wcex.lpfnWndProc = (WNDPROC)CustomWndProc;
+		wcex.cbClsExtra = 0;
+		wcex.cbWndExtra = DLGWINDOWEXTRA;
+		wcex.hInstance = hInstance;
+		wcex.hIcon = NULL;
+		wcex.hCursor = LoadCursor(NULL, IDC_ARROW);
+		wcex.hbrBackground = (HBRUSH)(COLOR_WINDOW);
+		wcex.lpszMenuName = 0;
+		wcex.lpszClassName = Win32ClassName;
+		wcex.hIconSm = 0;
+
+		RegisterClassEx(&wcex);
+
+		//Find location of mouse cursor
+		POINT p;
+		int x = 0;
+		int y = 0;
+		if (GetCursorPos(&p))
+		{
+			//Find monitor this is on
+			HMONITOR monitor = MonitorFromPoint(p, MONITOR_DEFAULTTOPRIMARY);
+			MONITORINFO mi;
+			RECT        rc;
+
+			mi.cbSize = sizeof(mi);
+			GetMonitorInfo(monitor, &mi);
+			rc = mi.rcMonitor;
+
+			//Set to fill current monitor
+			x = rc.left;
+			y = rc.top;
+			graphicsWidth = rc.right - rc.left;
+			graphicsHeight = rc.bottom - rc.top;
+
+		}
+
+
+		DWORD style = WS_VISIBLE | WS_POPUP;
+
+		hWnd = CreateWindowA(Win32ClassName, "Bridge Command",
+			style, x, y, graphicsWidth, graphicsHeight,
+			NULL, NULL, hInstance, NULL);
+
+		deviceParameters.WindowId = hWnd; //Tell irrlicht about the window to use
+
+	}
+#endif
+
     //create device
-    SIrrlichtCreationParameters deviceParameters;
+
     deviceParameters.DriverType = video::EDT_OPENGL;
 	//Allow optional directX if available
 	if (directX==1) {
         if (IrrlichtDevice::isDriverSupported(video::EDT_DIRECT3D9)) {
             deviceParameters.DriverType = video::EDT_DIRECT3D9;
         } else {
-            std::cout << "DirectX 9 requested but not available.\nThis may be because Bridge Command has been compiled without DirectX support,\nor your system does not support DirectX.\nTrying OpenGL" << std::endl << std::endl;
+            std::cerr << "DirectX 9 requested but not available.\nThis may be because Bridge Command has been compiled without DirectX support,\nor your system does not support DirectX.\nTrying OpenGL" << std::endl << std::endl;
         }
 	}
 
@@ -211,11 +347,20 @@ int main()
     deviceParameters.Bits = graphicsDepth;
     deviceParameters.Fullscreen = fullScreen;
     deviceParameters.AntiAlias = antiAlias;
+
     IrrlichtDevice* device = createDeviceEx(deviceParameters);
+
+	//On Windows, redirect console stderr to log file
+	std::string userLog = userFolder + "log.txt";
+	std::cout << "User log file is " << userLog << std::endl;
+	FILE * stream = 0;
+	#ifdef _WIN32
+	errno_t success = freopen_s(&stream, userLog.c_str(), "w", stderr);
+	#endif // _WIN32
 
 	if (device == 0) {
 		std::cerr << "Could not start - please check your graphics options." << std::endl;
-		exit(EXIT_FAILURE); //Could not get file system
+		return(EXIT_FAILURE); //Could not get file system
 	}
 
     device->setWindowCaption(core::stringw(LONGNAME.c_str()).c_str()); //Note: Odd conversion from char* to wchar*!
@@ -242,24 +387,11 @@ int main()
     io::IFileSystem* fileSystem = device->getFileSystem();
     if (fileSystem==0) {
         std::cerr << "Could not get filesystem:" << std::endl;
-        exit(EXIT_FAILURE); //Could not get file system
+        return(EXIT_FAILURE); //Could not get file system
 
     }
     fileSystem->changeWorkingDirectoryTo(exeFolderPath.c_str());
     #endif
-
-    //load language
-    std::string modifier = IniFile::iniFileToString(iniFilename, "lang");
-    if (modifier.length()==0) {
-        modifier = "en"; //Default
-    }
-    std::string languageFile = "language-";
-    languageFile.append(modifier);
-    languageFile.append(".txt");
-    if (Utilities::pathExists(userFolder + languageFile)) {
-        languageFile = userFolder + languageFile;
-    }
-    Lang language(languageFile);
 
     //set gui skin and 'flatten' this
     gui::IGUISkin* newskin = device->getGUIEnvironment()->createSkin(gui::EGST_WINDOWS_METALLIC   );
@@ -530,23 +662,27 @@ int main()
 
     device->drop();
 
-    //Save log messages to user directory, into log.txt, overwrite old file with that name
-    std::ofstream logFile;
-    logFile.open(userFolder + "log.txt");
-    for (unsigned int i=0;i<logMessages.size();i++) {
+    //Save log messages out
+	//Note that stderr has also been redirected to this file on windows, so it will contain anything from cerr, as well as these log messages
+	//Save log messages to user directory, into log.txt, overwrite old file with that name
+	std::ofstream logFile;
+	if (stream) {
+		fclose(stream);
+		logFile.open(userLog, std::ofstream::app); //Append
+	}
+	else {
+		logFile.open(userLog); //Overwrite
+	}
+	
+	for (unsigned int i=0;i<logMessages.size();i++) {
         if (logFile.good()) {
             //Check we're not creating an excessively long file
             if (i<=1000 && logMessages.at(i).length() <=1000) {
-                logFile << logMessages.at(i) << std::endl;
+                logFile << "Log: " << logMessages.at(i) << std::endl;
             }
         }
     }
-
-    //Debug - dump log
-    //for (unsigned int i=0;i<logMessages.size();i++) {
-    //    std::cout << logMessages.at(i) << std::endl;
-    //}
-
+	
     //End
     return(0);
 }
