@@ -28,8 +28,10 @@ if(BUILD_WITH_SOUND)
 		add_custom_command(
                 TARGET ${BINNAME}
                 POST_BUILD
+                COMMAND ${CMAKE_COMMAND} -E copy_if_different ${LIBRARY_OUTPUT_DIRECTORY}/sndfile.dll $<TARGET_FILE_DIR:${BINNAME}>/sndfile.dll
                 COMMAND ${CMAKE_COMMAND} -E copy_if_different ${LIBRARY_OUTPUT_DIRECTORY}/portaudio_x86.dll $<TARGET_FILE_DIR:${BINNAME}>/portaudio_x86.dll
         )
+
     else ()
         target_link_libraries(${BINNAME} PRIVATE
                 "${LIBRARY_OUTPUT_DIRECTORY}/libsndfile.so"
