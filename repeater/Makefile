@@ -25,7 +25,7 @@ endif
 ifeq ($(UNAME_S),Darwin)
 USERLDFLAGS = -stdlib=libc++ -L../libs/Irrlicht/irrlicht-svn/lib/OSX -lIrrlicht -L/usr/X11R6/lib$(LIBSELECT) -framework OpenGL -framework Cocoa -framework IOKit -framework CoreVideo
 else
-USERLDFLAGS = -L$(IrrlichtHome)/lib/Linux -lIrrlicht -L/usr/X11R6/lib$(LIBSELECT) -lGL -lXxf86vm -lXext -lX11 -lXcursor
+USERLDFLAGS = -L$(IrrlichtHome)/lib/Linux -lIrrlicht -L/usr/X11R6/lib$(LIBSELECT) -lGL -lXxf86vm -lXext -lX11 -lXcursor -lpthread
 endif
 
 ####
@@ -41,7 +41,7 @@ DESTPATH = $(BinPath)/$(Target)$(SUF)
 
 #default target is Linux
 all: 
-	$(warning Building...)
+	$(info Building...)
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(Sources) -o $(DESTPATH) $(LDFLAGS)
 ifeq ($(UNAME_S),Darwin)
 	rm -f ../BridgeCommand.app/Contents/MacOS/rp.app/Contents/MacOS/.gitignore
@@ -49,7 +49,7 @@ ifeq ($(UNAME_S),Darwin)
 endif
 
 clean:
-	$(warning Cleaning...)
+	$(info Cleaning...)
 	@$(RM) $(DESTPATH)
 
 .PHONY: all

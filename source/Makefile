@@ -124,7 +124,7 @@ DESTPATH = $(BinPath)/$(Target)$(SUF)
 
 #default target is Linux
 all:
-	$(warning Building...)
+	$(info Building...)
 #Build Irrlicht (different command on OSX)
 ifeq ($(UNAME_S),Darwin)
 	xcodebuild -project libs/Irrlicht/irrlicht-svn/source/Irrlicht/Irrlicht.xcodeproj
@@ -151,7 +151,9 @@ ifeq ($(UNAME_S),Darwin)
 	cp -a media BridgeCommand.app/Contents/Resources/media
 	cp -a Models BridgeCommand.app/Contents/Resources/Models
 	cp -a Scenarios BridgeCommand.app/Contents/Resources/Scenarios
-	cp -a shaders BridgeCommand.app/Contents/Resources/shaders
+	mkdir BridgeCommand.app/Contents/Resources/shaders
+	cat shaders/Water_ps.glsl | sed -E 's/#version 130/#version 120/' > BridgeCommand.app/Contents/Resources/shaders/Water_ps.glsl
+	cat shaders/Water_vs.glsl | sed -E 's/#version 130/#version 120/' > BridgeCommand.app/Contents/Resources/shaders/Water_vs.glsl
 	cp -a World BridgeCommand.app/Contents/Resources/World
 	cp -a bc5.ini BridgeCommand.app/Contents/Resources/bc5.ini
 	cp -a map.ini BridgeCommand.app/Contents/Resources/map.ini
@@ -159,19 +161,19 @@ ifeq ($(UNAME_S),Darwin)
 	cp -a repeater.ini BridgeCommand.app/Contents/Resources/repeater.ini
 	cp -a language-en.txt BridgeCommand.app/Contents/Resources/language-en.txt
 	cp -a languageController-en.txt BridgeCommand.app/Contents/Resources/languageController-en.txt
-	cp -a languageMultiplayer-en.txt BridgeCommand.app/Contents/Resources/languageMultiplayer-en.txt 
+	cp -a languageMultiplayer-en.txt BridgeCommand.app/Contents/Resources/languageMultiplayer-en.txt
 	cp -a languageLauncher-en.txt BridgeCommand.app/Contents/Resources/languageLauncher-en.txt
 	cp -a languageIniEditor-en.txt BridgeCommand.app/Contents/Resources/languageIniEditor-en.txt
 	cp -a languageRepeater-en.txt BridgeCommand.app/Contents/Resources/languageRepeater-en.txt
 endif
 
 clean:
-	$(warning Cleaning...)
+	$(info Cleaning...)
 ifeq ($(UNAME_S),Darwin)
 	xcodebuild -project libs/Irrlicht/irrlicht-svn/source/Irrlicht/Irrlicht.xcodeproj clean
 else
 	$(MAKE) -C $(IrrlichtHome)/source/Irrlicht/ clean
-endif	
+endif
 	$(MAKE) -C launcher/ clean
 	$(MAKE) -C controller/ clean
 	$(MAKE) -C editor/ clean

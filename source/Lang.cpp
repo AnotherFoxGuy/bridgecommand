@@ -18,7 +18,7 @@
 
 #include "IniFile.hpp"
 
-using namespace irr;
+//using namespace irr;
 
 Lang::Lang(std::string language)
 {
@@ -27,14 +27,11 @@ Lang::Lang(std::string language)
 
 irr::core::stringw Lang::translate(std::string phraseName)
 {
-    //Convert the string phraseName into a wstring
-    std::wstring wphraseName(phraseName.begin(), phraseName.end());
-
     //Look up
-    std::wstring translatedPhrase = IniFile::iniFileToWString(languageFileName,wphraseName);
+    std::wstring translatedPhrase = IniFile::iniFileToWString(languageFileName, phraseName);
     //Fall back
     if (translatedPhrase==L"") {
-        translatedPhrase = wphraseName;
+        translatedPhrase = std::wstring(phraseName.begin(), phraseName.end());
         //FIXME: Temp fix for the degree symbol, while utf-8 isn't properly sorted on all platforms
         if (phraseName == "deg") {
             translatedPhrase = L"°";
@@ -51,7 +48,7 @@ irr::core::stringw Lang::translate(std::string phraseName)
     }
 
     //convert to stringw
-    core::stringw returnPhrase(translatedPhrase.c_str());
+    irr::core::stringw returnPhrase(translatedPhrase.c_str());
 
     return returnPhrase;
 }
