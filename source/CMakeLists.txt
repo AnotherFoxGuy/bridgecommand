@@ -21,15 +21,19 @@ endif ()
 if(BUILD_WITH_SOUND)
     add_dependencies(${BINNAME} libsndfile-pr portaudio-pr)
     if (MSVC)
-        target_link_libraries(${BINNAME} PRIVATE
-                "${LIBRARY_OUTPUT_DIRECTORY}/portaudio_x86.lib"
-                "${LIBRARY_OUTPUT_DIRECTORY}/sndfile.lib")
+        if("${CMAKE_SIZEOF_VOID_P}" STREQUAL "4")
+            set(_CL_64 "x86")
+        else()
+            set(_CL_64 "x64")
+        endif()
+
+        target_link_libraries(${BINNAME} PRIVATE "${LIBRARY_OUTPUT_DIRECTORY}/sndfile.lib" "${LIBRARY_OUTPUT_DIRECTORY}/portaudio_${_CL_64}.lib")
 
 		add_custom_command(
                 TARGET ${BINNAME}
                 POST_BUILD
                 COMMAND ${CMAKE_COMMAND} -E copy_if_different ${LIBRARY_OUTPUT_DIRECTORY}/sndfile.dll $<TARGET_FILE_DIR:${BINNAME}>/sndfile.dll
-                COMMAND ${CMAKE_COMMAND} -E copy_if_different ${LIBRARY_OUTPUT_DIRECTORY}/portaudio_x86.dll $<TARGET_FILE_DIR:${BINNAME}>/portaudio_x86.dll
+                COMMAND ${CMAKE_COMMAND} -E copy_if_different ${LIBRARY_OUTPUT_DIRECTORY}/portaudio_${_CL_64}.dll $<TARGET_FILE_DIR:${BINNAME}>/portaudio_${_CL_64}.dll
         )
 
     else ()

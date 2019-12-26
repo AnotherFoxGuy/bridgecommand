@@ -109,7 +109,7 @@ add_subdirectory(source)
 
 set(cp_dir $<TARGET_FILE_DIR:bridgecommand>)
 add_custom_target(
-        copy-resources
+        copy_resources
         COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_SOURCE_DIR}/resources/bc5.ini ${cp_dir}/bc5.ini
         COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_SOURCE_DIR}/resources/map.ini ${cp_dir}/map.ini
         COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_SOURCE_DIR}/resources/mph.ini ${cp_dir}/mph.ini

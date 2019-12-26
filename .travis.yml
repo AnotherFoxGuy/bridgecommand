@@ -1,17 +1,15 @@
 language: c
+dist: xenial
 
 addons:
   apt:
-    sources:
-      - ubuntu-toolchain-r-test
     packages:
-      - gcc-6
-      - g++-6
-      - cmake
-      - cmake-data
+      - libgl1-mesa-dev
+      - ninja-build
 
 script:
-  - export CXX="g++-6" CC="gcc-6"
-  - cmake .
-  - make -j4
-  - make copy-resources
+  - cmake -GNinja -DCMAKE_BUILD_TYPE=Release .
+  - ninja libsndfile-pr 
+  - ninja portaudio-pr
+  - ninja
+  - ninja copy_resources
